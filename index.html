@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Wisielec</title>
+</head>
+
+<body>
+    <div class="header">Wisielec by RadoMir</div>
+    <div class="screen" id="intro">
+        <h2 class="description">Wybierz kategorię</h2>
+        <ul class="list">
+            <li>Informatyka</li>
+            <li>Prawdy życiowe</li>
+            <li>Filmy i Seriale</li>
+            <li>Chemia</li>
+        </ul>
+        <div class="output"></div>
+        <button class="startBtn">Start</button>
+    </div>
+    <div class="screen hidden" id="game">
+        <div class="categoryInfo"></div>
+        <div class="password"></div>
+        <div class="middle">
+            <div class="side left">
+                <img id="gallow" src="./img/s0.jpg" alt="gallow">
+            </div>
+            <div class="side right">
+                <div class="board"></div>
+            </div>
+        </div>
+        <div class="infoBoard"></div>
+    </div>
+    <script type="module" src="categories.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
