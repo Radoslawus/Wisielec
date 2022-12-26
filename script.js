@@ -8,10 +8,25 @@ const gameScreen = document.querySelector('#game')
 const board = document.querySelector('.board')
 const password = document.querySelector('.password')
 const categoryInfo = document.querySelector('.categoryInfo')
+const scoreBoard = document.querySelector('.scoreBoard')
+const scoreElem = document.querySelector('#score')
+const difficultyElems = document.querySelectorAll('.difficulty')
 const letters = ["A", "Ą", "B", "C", "Ć", "D", "E", "Ę", "F", "G", "H", "I", "J", "K", "L", "Ł", "M", "N", "Ń", "O", "Ó", "P", "Q", "R", "S", "Ś", "T", "U", "V", "W", "X", "Y", "Z", "Ź", "Ż"] // could be done easier - create string with all letters, and split it
 let properPass, hashedPass, category
+let difficultyLevel = 'easy'
+let score = 0
 let gallowCounter = 0
 let screenBolck = true
+
+difficultyElems.forEach(elem => {
+    elem.addEventListener('click', () => {
+        difficultyElems.forEach(element => {
+            element.classList.remove('choosen')
+        })
+        elem.classList.add('choosen')
+        difficultyLevel = elem.id
+    })
+})
 
 list.forEach(listItem => {
     listItem.addEventListener('click', () => {
@@ -31,6 +46,9 @@ startBtn.addEventListener('click', () => {
         setTimeout(() => {
             introScreen.classList.add('hidden')
             gameScreen.classList.remove('hidden')
+            if (difficultyLevel == 'medium') {
+                scoreBoard.classList.remove('hidden')
+            }
             createGame(category)
         }, 1000)
     }
@@ -42,7 +60,6 @@ letters.forEach(letter => {
     letterBox.classList.add('letterBox')
     letterBox.innerText = letter
     board.append(letterBox)
-
     letterBox.addEventListener('click', () => {
         checkLetter(letterBox.innerText)
     })
@@ -55,6 +72,7 @@ document.addEventListener('keydown', e => {
 
     // reaction for key push
     letters.forEach(letter => {
+        letter = letter.toLocaleUpperCase()
         if (e.key.toLocaleUpperCase() == letter.toLocaleUpperCase()) {
             checkLetter(letter.toLocaleUpperCase())
         }
@@ -99,6 +117,20 @@ function createGame(category) {
 }
 
 function checkLetter(letter) {
+    // chcek vowel
+    if (difficultyLevel == 'medium') {
+        let vowel
+        if (letter == 'A' || letter == 'E' || letter == 'Ą' || letter == 'Ę' || letter == 'I' || letter == 'U' || letter == 'Ó' || letter == 'O' || letter == 'Y') {
+            vowel = true
+        } else {
+            vowel = false
+        }
+        if (vowel && score < 1) {
+            noVowel()
+            return
+        }
+    }
+
     // check if letter is in the password. If yes, mark it green and send letter to reveal password. If no, dissallow letter.
     let hitCounter = 0
     let passArr = Array.from(properPass)
@@ -133,6 +165,10 @@ function revealLetter(revealLetter) {
     if (!hashedPass.includes("-")) {
         endgame("success")
     }
+
+    // add score
+    score++
+    scoreElem.textContent = `Score: ${score}`
 }
 
 function proceedSuccess(letter) {
@@ -201,6 +237,20 @@ function endgame(message) {
         })
     }
     createModalBox()
+}
+
+function noVowel() {
+    // modal with info
+    const infoModal = document.createElement('div')
+    const createInfoModal = () => {
+        infoModal.className = 'infoModal'
+        infoModal.innerText = 'Musisz mieć 1 punkt by użyć samogłoski'
+        document.querySelector('body').append(infoModal)
+        setTimeout(() => {
+            infoModal.remove()
+        }, 3000)
+    }
+    createInfoModal()
 }
 
 // to do:

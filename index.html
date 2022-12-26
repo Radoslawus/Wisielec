@@ -15,6 +15,12 @@
 <body>
     <div class="header">Wisielec by RadoMir</div>
     <div class="screen" id="intro">
+        <h3 class="description">Zmień poziom trudności</h3>
+        <div class="difficultyContainer">
+            <div class="difficulty choosen" id="easy">Łatwy</div>
+            <div class="difficulty" id="medium">Średni</div>
+            <div class="difficulty notAvalible" id="hard">Trudny</div>
+        </div>
         <h2 class="description">Wybierz kategorię</h2>
         <ul class="list">
             <li>Informatyka</li>
@@ -37,6 +43,10 @@
             </div>
         </div>
         <div class="infoBoard"></div>
+    </div>
+    <div class="scoreBoard hidden">
+        <div id="score">Score: 0</div>
+        <div class="scoreInfo">Musisz mieć 1 punkt by użyć samogłoski.</div>
     </div>
     <script type="module" src="categories.js"></script>
     <script type="module" src="script.js"></script>
