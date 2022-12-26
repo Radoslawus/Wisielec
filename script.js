@@ -10,9 +10,10 @@ const password = document.querySelector('.password')
 const categoryInfo = document.querySelector('.categoryInfo')
 const scoreBoard = document.querySelector('.scoreBoard')
 const scoreElem = document.querySelector('#score')
+const scoreInfo = document.querySelector('.scoreInfo')
 const difficultyElems = document.querySelectorAll('.difficulty')
 const letters = ["A", "Ą", "B", "C", "Ć", "D", "E", "Ę", "F", "G", "H", "I", "J", "K", "L", "Ł", "M", "N", "Ń", "O", "Ó", "P", "Q", "R", "S", "Ś", "T", "U", "V", "W", "X", "Y", "Z", "Ź", "Ż"] // could be done easier - create string with all letters, and split it
-let properPass, hashedPass, category
+let properPass, hashedPass, category, vowel
 let difficultyLevel = 'easy'
 let score = 0
 let gallowCounter = 0
@@ -46,7 +47,7 @@ startBtn.addEventListener('click', () => {
         setTimeout(() => {
             introScreen.classList.add('hidden')
             gameScreen.classList.remove('hidden')
-            if (difficultyLevel == 'medium') {
+            if (difficultyLevel != 'easy') {
                 scoreBoard.classList.remove('hidden')
             }
             createGame(category)
@@ -114,17 +115,25 @@ function createGame(category) {
     // print hashed password
     password.innerText = hashedPass
     categoryInfo.innerText = `Kategoria: ${category}`
+    if (difficultyLevel == 'hard') {
+        console.log(difficultyLevel)
+        scoreInfo.innerHTML = `
+        <div>Musisz mieć 1 punkt by użyć samogłoski</div>
+        <div>Za użycie samogłoski tracisz punkt!</div>
+        `
+    }
 }
 
 function checkLetter(letter) {
     // chcek vowel
-    if (difficultyLevel == 'medium') {
-        let vowel
+    if (difficultyLevel == 'medium' || difficultyLevel == 'hard') {
         if (letter == 'A' || letter == 'E' || letter == 'Ą' || letter == 'Ę' || letter == 'I' || letter == 'U' || letter == 'Ó' || letter == 'O' || letter == 'Y') {
             vowel = true
         } else {
             vowel = false
         }
+        // check if score is 0 and no more nonvowels... then allow move
+
         if (vowel && score < 1) {
             noVowel()
             return
@@ -167,7 +176,13 @@ function revealLetter(revealLetter) {
     }
 
     // add score
-    score++
+    if (difficultyLevel == 'medium' && vowel) {
+        score = score
+    } else if (difficultyLevel == 'hard' && vowel) {
+        score--
+    } else {
+        score++
+    }
     scoreElem.textContent = `Score: ${score}`
 }
 
@@ -205,6 +220,13 @@ function proceedFail(letter) {
         imgElem.src = `./img/s${gallowCounter}.jpg`
     } else {
         endgame("fail")
+    }
+
+    // modyfi score
+    if (difficultyLevel == 'hard' && vowel) {
+        console.log('score -')
+        score--
+        scoreElem.textContent = `Score: ${score}`
     }
 }
 
@@ -254,7 +276,5 @@ function noVowel() {
 }
 
 // to do:
-// 1. implement mechanizm to score points and buy vowels for hard level
-// 2. implement difficulty levels
-// 3. Create info screen and nawigation between screens
-// 4. meke it as extension (? or add backend) so score can be keep in browser, and save high score - with input userName.
+// 1. Create info screen and nawigation between screens
+// 2. meke it as extension (? or add backend) so score can be keep in browser, and save high score - with input userName.
